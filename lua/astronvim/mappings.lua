@@ -32,6 +32,24 @@ maps.n["<C-q>"] = { "<cmd>q!<cr>", desc = "Force quit" }
 maps.n["|"] = { "<cmd>vsplit<cr>", desc = "Vertical Split" }
 maps.n["\\"] = { "<cmd>split<cr>", desc = "Horizontal Split" }
 
+-- Movement
+maps.n["<M-j>"] = { "ddp", desc = "move line down" }
+maps.n["<M-k>"] = { "ddkP", desc = "move line up" }
+
+maps.n["<C-j>"] = { ":resize-1<CR>", desc = "shrink split" }
+maps.n["<C-k>"] = { ":resize+1<CR>", desc = "grow split" }
+maps.n["<C-h>"] = { ":vertical resize-1<CR>", desc = "vertical shrink" }
+maps.n["<C-l>"] = { ":vertical resize+1<CR>", desc = "vertical grow" }
+
+-- Format
+maps.n["<leader>fp"] = { ":exec '!black %'<CR>", desc = "format" }
+maps.n["<leader>fjs"] = { ":exec '!standard --fix %'<CR>", desc = "format standard" }
+maps.n["<leader>fjp"] = { ":exec '!prettier --write %'<CR>", desc = "format prettier" }
+maps.n["<leader>ftt"] = { ":exec '!ts-standard --fix %'<CR>", desc = "format ts-standard" }
+maps.n["<leader>ftp"] = { ":exec '!prettier --write %'<CR>", desc = "format prettier" }
+
+maps.n["S"] = { ":%s//g<Left><Left>", desc = "replace all" }
+
 -- Plugin Manager
 maps.n["<leader>p"] = sections.p
 maps.n["<leader>pi"] = { function() require("lazy").install() end, desc = "Plugins Install" }
@@ -47,10 +65,18 @@ maps.n["<leader>pv"] = { "<cmd>AstroVersion<cr>", desc = "AstroNvim Version" }
 maps.n["<leader>pl"] = { "<cmd>AstroChangelog<cr>", desc = "AstroNvim Changelog" }
 
 -- Manage Buffers
+--
+maps.n["<M-q>"] = { function() require("astronvim.utils.buffer").close() end, desc = "Close buffer" }
 maps.n["<leader>c"] = { function() require("astronvim.utils.buffer").close() end, desc = "Close buffer" }
 maps.n["<leader>C"] = { function() require("astronvim.utils.buffer").close(0, true) end, desc = "Force close buffer" }
+maps.n["<M-.>"] =
+  { function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end, desc = "Next buffer" }
 maps.n["]b"] =
   { function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end, desc = "Next buffer" }
+maps.n["<M-,>"] = {
+  function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
+  desc = "Previous buffer",
+}
 maps.n["[b"] = {
   function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
   desc = "Previous buffer",
@@ -142,11 +168,33 @@ if is_available "gitsigns.nvim" then
   maps.n["<leader>gS"] = { function() require("gitsigns").stage_buffer() end, desc = "Stage Git buffer" }
   maps.n["<leader>gu"] = { function() require("gitsigns").undo_stage_hunk() end, desc = "Unstage Git hunk" }
   maps.n["<leader>gd"] = { function() require("gitsigns").diffthis() end, desc = "View Git diff" }
+  maps.n["<leader>gk"] = { function() require("gitsigns").preview_hunk() end, desc = "Preview Git hunk" }
+  maps.n["<leader>gj"] = { function() require("gitsigns").next_hunk() end, desc = "Next Git hunk" }
 end
+
+-- lsp
+maps.n["gD"] = {
+  function() vim.lsp.buf.declaration() end,
+  desc = "lsp declaration",
+}
+maps.n["gd"] = {
+  function() vim.lsp.buf.definition() end,
+  desc = "lsp definition",
+}
+maps.n["<leader>D"] = {
+  function() vim.lsp.buf.type_definition() end,
+  desc = "lsp definition type",
+}
+
+maps.n["<leader>lr"] = {
+  function() vim.lsp.buf.references {} end,
+  desc = "lsp references",
+}
 
 -- NeoTree
 if is_available "neo-tree.nvim" then
   maps.n["<leader>e"] = { "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer" }
+  maps.n["<C-n>"] = { "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer" }
   maps.n["<leader>o"] = {
     function()
       if vim.bo.filetype == "neo-tree" then
@@ -178,19 +226,19 @@ end
 
 -- Smart Splits
 if is_available "smart-splits.nvim" then
-  maps.n["<C-h>"] = { function() require("smart-splits").move_cursor_left() end, desc = "Move to left split" }
-  maps.n["<C-j>"] = { function() require("smart-splits").move_cursor_down() end, desc = "Move to below split" }
-  maps.n["<C-k>"] = { function() require("smart-splits").move_cursor_up() end, desc = "Move to above split" }
-  maps.n["<C-l>"] = { function() require("smart-splits").move_cursor_right() end, desc = "Move to right split" }
+  maps.n["<C-w>h"] = { function() require("smart-splits").move_cursor_left() end, desc = "Move to left split" }
+  maps.n["<C-w>j"] = { function() require("smart-splits").move_cursor_down() end, desc = "Move to below split" }
+  maps.n["<C-w>k"] = { function() require("smart-splits").move_cursor_up() end, desc = "Move to above split" }
+  maps.n["<C-w>l"] = { function() require("smart-splits").move_cursor_right() end, desc = "Move to right split" }
   maps.n["<C-Up>"] = { function() require("smart-splits").resize_up() end, desc = "Resize split up" }
   maps.n["<C-Down>"] = { function() require("smart-splits").resize_down() end, desc = "Resize split down" }
   maps.n["<C-Left>"] = { function() require("smart-splits").resize_left() end, desc = "Resize split left" }
   maps.n["<C-Right>"] = { function() require("smart-splits").resize_right() end, desc = "Resize split right" }
 else
-  maps.n["<C-h>"] = { "<C-w>h", desc = "Move to left split" }
-  maps.n["<C-j>"] = { "<C-w>j", desc = "Move to below split" }
-  maps.n["<C-k>"] = { "<C-w>k", desc = "Move to above split" }
-  maps.n["<C-l>"] = { "<C-w>l", desc = "Move to right split" }
+  -- maps.n["<C-h>"] = { "<C-w>h", desc = "Move to left split" }
+  -- maps.n["<C-j>"] = { "<C-w>j", desc = "Move to below split" }
+  -- maps.n["<C-k>"] = { "<C-w>k", desc = "Move to above split" }
+  -- maps.n["<C-l>"] = { "<C-w>l", desc = "Move to right split" }
   maps.n["<C-Up>"] = { "<cmd>resize -2<CR>", desc = "Resize split up" }
   maps.n["<C-Down>"] = { "<cmd>resize +2<CR>", desc = "Resize split down" }
   maps.n["<C-Left>"] = { "<cmd>vertical resize -2<CR>", desc = "Resize split left" }
@@ -257,7 +305,7 @@ if is_available "telescope.nvim" then
   maps.n["<leader>fW"] = {
     function()
       require("telescope.builtin").live_grep {
-        additional_args = function(args) return vim.list_extend(args, { "--hidden", "--no-ignore" }) end,
+        additional_args = function(args) return vim.list_extend(args, { "--hidden", "--no-ignore" }, 1, 2) end,
       }
     end,
     desc = "Find words in all files",
@@ -346,6 +394,8 @@ end
 -- Stay in indent mode
 maps.v["<S-Tab>"] = { "<gv", desc = "unindent line" }
 maps.v["<Tab>"] = { ">gv", desc = "indent line" }
+maps.v[">"] = { ">gv", desc = "visual indent" }
+maps.v["<"] = { "<gv", desc = "visual outdent" }
 
 -- Improved Terminal Navigation
 maps.t["<C-h>"] = { "<cmd>wincmd h<cr>", desc = "Terminal left window navigation" }
@@ -356,11 +406,6 @@ maps.t["<C-l>"] = { "<cmd>wincmd l<cr>", desc = "Terminal right window navigatio
 maps.n["<leader>u"] = sections.u
 -- Custom menu for modification of the user experience
 if is_available "nvim-autopairs" then maps.n["<leader>ua"] = { ui.toggle_autopairs, desc = "Toggle autopairs" } end
-maps.n["<leader>ub"] = { ui.toggle_background, desc = "Toggle background" }
-if is_available "nvim-cmp" then maps.n["<leader>uc"] = { ui.toggle_cmp, desc = "Toggle autocompletion" } end
-if is_available "nvim-colorizer.lua" then
-  maps.n["<leader>uC"] = { "<cmd>ColorizerToggle<cr>", desc = "Toggle color highlight" }
-end
 maps.n["<leader>ud"] = { ui.toggle_diagnostics, desc = "Toggle diagnostics" }
 maps.n["<leader>ug"] = { ui.toggle_signcolumn, desc = "Toggle signcolumn" }
 maps.n["<leader>ui"] = { ui.set_indent, desc = "Change indent setting" }

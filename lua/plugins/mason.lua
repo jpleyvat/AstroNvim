@@ -21,4 +21,10 @@ return {
     },
     config = require "plugins.configs.mason",
   },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    ops = {
+      ensure_installed = { "prettier", "black", "stylua" },
+    },
+  },
 }

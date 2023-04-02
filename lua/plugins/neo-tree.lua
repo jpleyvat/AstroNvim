@@ -52,7 +52,7 @@ return {
               { (" %s: "):format(result.msg) },
               { result.val, "String" },
               { "\n" },
-            })
+            }, 1, 4)
           end
         end
         vim.api.nvim_echo(messages, false, {})
@@ -66,7 +66,7 @@ return {
     local get_icon = require("astronvim.utils").get_icon
     return {
       auto_clean_after_session_restore = true,
-      close_if_last_window = true,
+      close_if_last_window = false,
       source_selector = {
         winbar = true,
         content_layout = "center",
@@ -78,7 +78,7 @@ return {
         },
       },
       default_component_configs = {
-        indent = { padding = 0, indent_size = 1 },
+        indent = { padding = 0, indent_size = 2 },
         icon = {
           folder_closed = get_icon "FolderClosed",
           folder_open = get_icon "FolderOpen",
@@ -106,6 +106,8 @@ return {
           ["<space>"] = false, -- disable space until we figure out which-key disabling
           ["[b"] = "prev_source",
           ["]b"] = "next_source",
+          ["<C-s>"] = "open_split",
+          ["<C-v>"] = "open_vsplit",
           o = "open",
           O = "system_open",
           h = "parent_or_close",
@@ -126,6 +128,13 @@ return {
         {
           event = "neo_tree_buffer_enter",
           handler = function(_) vim.opt_local.signcolumn = "auto" end,
+        },
+        {
+          event = "file_opened",
+          handler = function(_)
+            --auto close
+            require("neo-tree").close_all()
+          end,
         },
       },
     }

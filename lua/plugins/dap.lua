@@ -6,7 +6,10 @@ return {
       "jay-babu/mason-nvim-dap.nvim",
       dependencies = { "nvim-dap" },
       cmd = { "DapInstall", "DapUninstall" },
-      opts = { automatic_setup = true },
+      opts = {
+        automatic_setup = true,
+        ensure_installed = { "python" },
+      },
       config = require "plugins.configs.mason-nvim-dap",
     },
     {

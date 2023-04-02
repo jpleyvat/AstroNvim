@@ -23,6 +23,7 @@ return {
     incremental_selection = { enable = true },
     autotag = { enable = true },
     context_commentstring = { enable = true, enable_autocmd = false },
+    ensure_installed = { "python", "typescript", "javascript", "css", "tsx" },
   },
   config = require "plugins.configs.nvim-treesitter",
 }
