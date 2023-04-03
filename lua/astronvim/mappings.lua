@@ -167,17 +167,17 @@ if is_available "gitsigns.nvim" then
   maps.n["<leader>gs"] = { function() require("gitsigns").stage_hunk() end, desc = "Stage Git hunk" }
   maps.n["<leader>gS"] = { function() require("gitsigns").stage_buffer() end, desc = "Stage Git buffer" }
   maps.n["<leader>gu"] = { function() require("gitsigns").undo_stage_hunk() end, desc = "Unstage Git hunk" }
-  maps.n["<leader>gd"] = { function() require("gitsigns").diffthis() end, desc = "View Git diff" }
+  maps.n["<leader>gg"] = { function() require("gitsigns").diffthis() end, desc = "View Git diff" }
   maps.n["<leader>gk"] = { function() require("gitsigns").preview_hunk() end, desc = "Preview Git hunk" }
   maps.n["<leader>gj"] = { function() require("gitsigns").next_hunk() end, desc = "Next Git hunk" }
 end
 
 -- lsp
-maps.n["gD"] = {
+maps.n["<leader>gD"] = {
   function() vim.lsp.buf.declaration() end,
   desc = "lsp declaration",
 }
-maps.n["gd"] = {
+maps.n["<leader>gd"] = {
   function() vim.lsp.buf.definition() end,
   desc = "lsp definition",
 }
