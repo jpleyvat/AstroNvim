@@ -1,3 +1,4 @@
+-- TODO: replace <leader> to <Leader> everywhere in AstroNvim v4 to match vimdoc
 local utils = require "astronvim.utils"
 local get_icon = utils.get_icon
 local is_available = utils.is_available
@@ -109,6 +110,7 @@ maps.n["<leader>bd"] = {
 }
 maps.n["<leader>bl"] =
   { function() require("astronvim.utils.buffer").close_left() end, desc = "Close all buffers to the left" }
+maps.n["<leader>bp"] = { function() require("astronvim.utils.buffer").prev() end, desc = "Previous buffer" }
 maps.n["<leader>br"] =
   { function() require("astronvim.utils.buffer").close_right() end, desc = "Close all buffers to the right" }
 maps.n["<leader>bs"] = sections.bs
