@@ -18,10 +18,10 @@ return {
   },
   {
     "github/copilot.vim",
-    config = function()
-      local g = vim.g
-      g.copilot_node_command = "$HOME/.nvm/versions/node/v16.20.0/bin/node"
-    end,
+    -- config = function()
+    --   local g = vim.g
+    --   g.copilot_node_command = "$HOME/.nvm/versions/node/v16.20.1/bin/node"
+    -- end,
     event = "User AstroFile",
   },
 }
